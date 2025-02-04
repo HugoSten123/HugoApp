@@ -19,7 +19,7 @@ public static class ClientAppWebApplicationExtensions
             builder.UseRewriter(new RewriteOptions().AddRedirect("index.html", "/"));
             builder.UseSpa(spa =>
             {
-                spa.Options.SourcePath = "ClientApp";
+                spa.Options.SourcePath = "ClientApp/dist/browser";
 
                 if (app.Environment.IsDevelopment())
                 {
