@@ -1,0 +1,28 @@
+<div class="max-w-6xl mx-auto p-6 bg-white shadow-lg rounded-lg">
+  <header class="text-center mb-8">
+    <h1 class="text-4xl font-bold text-gray-800 mb-2">Välkommen till Hugos Lilla Dagbok</h1>
+    <p class="text-lg text-gray-600">
+      Här hittar du mina senaste tankar och reflektioner. Scrolla ner för att läsa mina senaste inlägg!
+    </p>
+  </header>
+
+  <h2 class="text-3xl font-semibold text-blue-600 text-center uppercase mb-8">
+    Senaste inläggen:
+  </h2>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <a *ngFor="let entry of diaryEntries; let i = index"
+       [routerLink]="['/entry-detail', entry.id]"
+       class="block p-4 rounded-lg shadow-md bg-white hover:ring-2 transform duration-200 hover:shadow-lg"
+       [ngClass]="getBorderClass(i)">
+
+      <img *ngIf="entry.imageUrl" [src]="entry.imageUrl" alt="Entry Image" class="w-full h-auto rounded-md mb-4" />
+
+      <h3 class="text-lg font-bold text-gray-800">{{ entry.title }}</h3>
+
+      <p class="text-gray-600 mt-2 break-words" [innerHTML]="entry.content"></p>
+
+      <span class="block mt-4 text-sm text-gray-500 text-right">📅 {{ entry.date | date:'medium' }}</span>
+    </a>
+  </div>
+</div>

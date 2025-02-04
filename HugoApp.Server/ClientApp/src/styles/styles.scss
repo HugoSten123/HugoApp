@@ -1,0 +1,32 @@
+/* ----------------------------------------------------------------------------------------------------- */
+/*  @ Import/write your custom styles here.
+/*  @ Styles from this file will override 'vendors.scss' and Fuse's base styles.
+/* ----------------------------------------------------------------------------------------------------- */
+.save-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    height: 60px;
+    background: rgba(0,0,0,0.75);
+    width: 100%;
+    line-height: 60px;
+    text-align: center;
+    z-index: 600;
+}
+
+.mat-mdc-snack-bar-container {
+    --mat-mdc-snack-bar-button-color: #ffffff;
+    --mdc-snackbar-supporting-text-color: #ffffff;
+
+    &.app-notification-error {
+        --mdc-snackbar-container-color: #f23a2f !important;
+    }
+
+    &.app-notification-success {
+        --mdc-snackbar-container-color: #43a446 !important;
+    }
+
+    &.app-notification-info {
+        --mdc-snackbar-container-color: #e87e32 !important;
+    }
+}
