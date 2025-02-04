@@ -6,58 +6,21 @@
     <SpaRoot>ClientApp\</SpaRoot>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="ClientApp\data\**" />
-    <Compile Remove="ClientApp\src\app\modules\about\NewFolder\**" />
-    <Compile Remove="ClientApp\src\app\modules\home\NewFolder1\**" />
-    <Compile Remove="ClientApp\src\app\modules\home\NewFolder\**" />
-    <Compile Remove="ClientApp\src\app\modules\NewFolder1\**" />
-    <Compile Remove="ClientApp\src\app\modules\NewFolder2\**" />
-    <Compile Remove="ClientApp\src\app\modules\NewFolder3\**" />
-    <Compile Remove="ClientApp\src\app\modules\NewFolder4\**" />
-    <Compile Remove="ClientApp\src\app\modules\NewFolder5\**" />
-    <Compile Remove="ClientApp\src\app\modules\NewFolder6\**" />
+	  <Compile Remove="wwwroot\data\**" />
+	  <Compile Remove="ClientApp\src\**" />
     <Compile Remove="Controllers\data\**" />
     <Content Remove="ClientApp\data\**" />
-    <Content Remove="ClientApp\src\app\modules\about\NewFolder\**" />
-    <Content Remove="ClientApp\src\app\modules\home\NewFolder1\**" />
-    <Content Remove="ClientApp\src\app\modules\home\NewFolder\**" />
-    <Content Remove="ClientApp\src\app\modules\NewFolder1\**" />
-    <Content Remove="ClientApp\src\app\modules\NewFolder2\**" />
-    <Content Remove="ClientApp\src\app\modules\NewFolder3\**" />
-    <Content Remove="ClientApp\src\app\modules\NewFolder4\**" />
-    <Content Remove="ClientApp\src\app\modules\NewFolder5\**" />
-    <Content Remove="ClientApp\src\app\modules\NewFolder6\**" />
     <Content Remove="Controllers\data\**" />
-    <EmbeddedResource Remove="ClientApp\data\**" />
-    <EmbeddedResource Remove="ClientApp\src\app\modules\about\NewFolder\**" />
-    <EmbeddedResource Remove="ClientApp\src\app\modules\home\NewFolder1\**" />
-    <EmbeddedResource Remove="ClientApp\src\app\modules\home\NewFolder\**" />
-    <EmbeddedResource Remove="ClientApp\src\app\modules\NewFolder1\**" />
-    <EmbeddedResource Remove="ClientApp\src\app\modules\NewFolder2\**" />
-    <EmbeddedResource Remove="ClientApp\src\app\modules\NewFolder3\**" />
-    <EmbeddedResource Remove="ClientApp\src\app\modules\NewFolder4\**" />
-    <EmbeddedResource Remove="ClientApp\src\app\modules\NewFolder5\**" />
-    <EmbeddedResource Remove="ClientApp\src\app\modules\NewFolder6\**" />
     <EmbeddedResource Remove="Controllers\data\**" />
     <None Remove="ClientApp\data\**" />
-    <None Remove="ClientApp\src\app\modules\about\NewFolder\**" />
-    <None Remove="ClientApp\src\app\modules\home\NewFolder1\**" />
-    <None Remove="ClientApp\src\app\modules\home\NewFolder\**" />
-    <None Remove="ClientApp\src\app\modules\NewFolder1\**" />
-    <None Remove="ClientApp\src\app\modules\NewFolder2\**" />
-    <None Remove="ClientApp\src\app\modules\NewFolder3\**" />
-    <None Remove="ClientApp\src\app\modules\NewFolder4\**" />
-    <None Remove="ClientApp\src\app\modules\NewFolder5\**" />
-    <None Remove="ClientApp\src\app\modules\NewFolder6\**" />
     <None Remove="Controllers\data\**" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Controllers\ValuesController.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Remove="ClientApp\src\app\core\services\entries.service.ts" />
-    <None Remove="ClientApp\src\app\modules\home\Om" />
-    <None Remove="ClientApp\src\app\modules\Om" />
+    
+	<None Remove="wwwroot\data\**" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.SpaProxy" Version="8.0.11" />
@@ -68,10 +31,12 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="7.2.0" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="ClientApp\src\app\modules\NewFolder\" />
+    <TypeScriptCompile Include="ClientApp\src\app\core\services\entries.service.ts" />
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="ClientApp\src\app\core\services\entries.service.ts" />
+    <Content Update="wwwroot\data\entries.json">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Release' And !Exists('$(SpaRoot)node_modules') ">
     <!-- Ensure Node.js is installed -->
@@ -87,7 +52,7 @@
 		<Exec WorkingDirectory="$(SpaRoot)" Command="npm ci" />
     <Message Importance="high" Text="Restoring dependencies using 'npm'. This may take several minutes..." />
     <Message Importance="high" Text="Installing with ConfiguratorBuildBranch: '$(ConfiguratorBuildBranch)'" />
-    <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build" Condition="'$(ConfiguratorBuildBranch)' == 'master'" />
+    <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build" />
 
 		<!-- Include the newly-built files in the publish output -->
 		<ItemGroup>

@@ -7,7 +7,7 @@ namespace HugoApp.Server.Controllers
     [Route("api/[controller]")]
     public class EntryController : ControllerBase
     {
-        private const string filePath = "data/entries.json";
+        private const string filePath = "wwwroot/data/entries.json";
 
         [HttpPost, Route("save")]
         public IActionResult SaveEntry([FromBody] Entry entry)
@@ -29,7 +29,6 @@ namespace HugoApp.Server.Controllers
                     }
                 }
 
-               
                 entries.Add(entry);
 
                 string newJson = JsonSerializer.Serialize(entries);

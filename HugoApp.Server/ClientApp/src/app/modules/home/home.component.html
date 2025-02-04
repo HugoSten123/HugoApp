@@ -13,16 +13,16 @@
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
     <a *ngFor="let entry of diaryEntries; let i = index"
        [routerLink]="['/entry-detail', entry.id]"
-       class="block p-4 rounded-lg shadow-md bg-white hover:ring-2 transform duration-200 hover:shadow-lg"
+       class="block p-4 rounded-lg shadow-md bg-white hover:ring-2 transform duration-200 hover:shadow-lg flex flex-col h-full"
        [ngClass]="getBorderClass(i)">
 
-      <img *ngIf="entry.imageUrl" [src]="entry.imageUrl" alt="Entry Image" class="w-full h-auto rounded-md mb-4" />
+      <div class="flex-grow">
+        <img *ngIf="entry.imageUrl" [src]="entry.imageUrl" alt="Entry Image" class="w-full h-auto rounded-md mb-4" />
+        <h3 class="text-lg font-bold text-gray-800">{{ entry.title }}</h3>
+        <p class="text-gray-600 mt-2 break-words" [innerHTML]="entry.content"></p>
+      </div>
 
-      <h3 class="text-lg font-bold text-gray-800">{{ entry.title }}</h3>
-
-      <p class="text-gray-600 mt-2 break-words" [innerHTML]="entry.content"></p>
-
-      <span class="block mt-4 text-sm text-gray-500 text-right">📅 {{ entry.date | date:'medium' }}</span>
+      <span class="block text-sm text-gray-500 text-right mt-auto">📅 {{ entry.date | date:'medium' }}</span>
     </a>
   </div>
 </div>

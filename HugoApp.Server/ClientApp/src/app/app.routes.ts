@@ -39,6 +39,11 @@ export default [
       {
         path: 'entry-detail/:id',
         component: EntryDetailComponent,
+      },
+      {
+        path: '',
+        redirectTo: 'Hem',
+        pathMatch: 'full'
       }
     ],
   },

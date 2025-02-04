@@ -15,7 +15,7 @@ export interface Entry {
   providedIn: 'root',
 })
 export class EntriesService {
-  private apiUrl = 'https://localhost:7272/api';
+  private apiUrl = 'api';
 
   constructor(private http: HttpClient) { }
 
