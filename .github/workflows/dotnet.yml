@@ -27,4 +27,4 @@ jobs:
     - name: Test
       run: dotnet test --no-build --verbosity normal
     - name: Create the package
-      run: dotnet pack --configuration Release HugoApp.Server\HugoApp.Server.csproj
+      run: dotnet pack --configuration Release HugoApp.Server/HugoApp.Server.csproj
