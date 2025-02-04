@@ -1,9 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using System;
 
 namespace HugoApp.Server.Controllers
 {
