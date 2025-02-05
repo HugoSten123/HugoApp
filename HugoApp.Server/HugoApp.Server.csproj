@@ -24,6 +24,14 @@
 	<None Remove="wwwroot\data\**" />
   </ItemGroup>
   <ItemGroup>
+    <Content Remove="wwwroot\data\entries.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="wwwroot\data\entries.json">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.SpaProxy" Version="8.0.11" />
     <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="8.0.11" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.0" />
@@ -33,11 +41,6 @@
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="ClientApp\src\app\core\services\entries.service.ts" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Update="wwwroot\data\entries.json">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Release' And !Exists('$(SpaRoot)node_modules') ">
     <!-- Ensure Node.js is installed -->
@@ -51,9 +54,9 @@
   <Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
 		<!-- As part of publishing, ensure the JS resources are freshly built in production mode -->
 		<Exec WorkingDirectory="$(SpaRoot)" Command="npm ci" />
-    <Message Importance="high" Text="Restoring dependencies using 'npm'. This may take several minutes..." />
-    <Message Importance="high" Text="Installing with ConfiguratorBuildBranch: '$(ConfiguratorBuildBranch)'" />
-    <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build" />
+        <Message Importance="high" Text="Restoring dependencies using 'npm'. This may take several minutes..." />
+        <Message Importance="high" Text="Installing with ConfiguratorBuildBranch: '$(ConfiguratorBuildBranch)'" />
+        <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build" />
 
 		<!-- Include the newly-built files in the publish output -->
 		<ItemGroup>
@@ -65,7 +68,6 @@
 				</XPath>
 			</MsDeploySkipRules>
 			<DistFiles Include="$(SpaRoot)dist\**; $(SpaRoot)dist-server\**" />
-			<DistFiles Include="$(SpaRoot)node_modules\**" Condition="'$(BuildServerSideRenderer)' == 'true'" />
 			<ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
 				<RelativePath>%(DistFiles.Identity)</RelativePath>
 				<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>

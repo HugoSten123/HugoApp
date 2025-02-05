@@ -5,7 +5,9 @@ import { EditorModule } from '@tinymce/tinymce-angular';
 import { EntriesService, Entry } from 'app/core/services/entries.service';
 import { EditorComponent } from '@tinymce/tinymce-angular';
 import { DomSanitizer } from '@angular/platform-browser';
-import { FuseConfirmationService } from '@fuse/services/confirmation'; 
+import { FuseConfirmationService } from '@fuse/services/confirmation';
+import { Title } from '@angular/platform-browser';  
+
 @Component({
   selector: 'app-entries',
   templateUrl: './entries.component.html',
@@ -28,7 +30,8 @@ export class EntriesComponent implements OnInit {
     private fb: FormBuilder,
     private entriesService: EntriesService,
     private sanitizer: DomSanitizer,
-    private fuseConfirmationService: FuseConfirmationService
+    private fuseConfirmationService: FuseConfirmationService,
+    private titleService: Title  
   ) {
     this.entryForm = this.fb.group({
       title: ['', Validators.required],
@@ -39,6 +42,7 @@ export class EntriesComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchEntries();
+    this.titleService.setTitle('AJP Checkout - Inlägg');  
   }
 
   fetchEntries(): void {

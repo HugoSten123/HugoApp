@@ -9,6 +9,14 @@ namespace HugoApp.Server.Controllers
     {
         private const string filePath = "wwwroot/data/entries.json";
 
+        public EntryController()
+        {
+            if (!System.IO.File.Exists(filePath))
+            {
+                System.IO.File.Create(filePath);
+            }
+        }
+
         [HttpPost, Route("save")]
         public IActionResult SaveEntry([FromBody] Entry entry)
         {

@@ -19,32 +19,47 @@ export default [
         path: 'Hem',
         pathMatch: 'full',
         component: HomeComponent,
+        data: {
+          title: 'Hem', 
+        },
       },
       {
         path: 'inlägg',
         pathMatch: 'full',
         component: EntriesComponent,
-        canActivate: [AuthGuard], 
+        canActivate: [AuthGuard],
+        data: {
+          title: 'Inlägg', 
+        },
       },
       {
         path: 'om',
         pathMatch: 'full',
         component: AboutComponent,
+        data: {
+          title: 'Om oss', 
+        },
       },
       {
         path: 'login',
         pathMatch: 'full',
         component: LoginComponent,
+        data: {
+          title: 'Logga in', 
+        },
       },
       {
         path: 'entry-detail/:id',
         component: EntryDetailComponent,
+        data: {
+          title: 'Inlägg Detaljer', 
+        },
       },
       {
         path: '',
         redirectTo: 'Hem',
-        pathMatch: 'full'
-      }
+        pathMatch: 'full',
+      },
     ],
   },
 ] as Route[];
