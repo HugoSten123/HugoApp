@@ -37,7 +37,7 @@ export default [
         pathMatch: 'full',
         component: AboutComponent,
         data: {
-          title: 'Om oss', 
+          title: 'Om', 
         },
       },
       {
