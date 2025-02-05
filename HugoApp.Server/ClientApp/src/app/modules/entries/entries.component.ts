@@ -42,7 +42,7 @@ export class EntriesComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchEntries();
-    this.titleService.setTitle('AJP Checkout - Inlägg');  
+    this.titleService.setTitle('Hugos dagbok - Inlägg');  
   }
 
   fetchEntries(): void {
