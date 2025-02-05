@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { EntriesService, Entry } from 'app/core/services/entries.service';
 import { Location } from '@angular/common';
 import { CommonModule } from '@angular/common';
-import { Title, Meta } from '@angular/platform-browser'; 
+import { Title, Meta } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-entry-detail',
@@ -21,7 +21,7 @@ export class EntryDetailComponent implements OnInit {
     private entriesService: EntriesService,
     private location: Location,
     private titleService: Title,
-    private metaService: Meta  
+    private metaService: Meta
   ) { }
 
   ngOnInit(): void {
@@ -45,10 +45,19 @@ export class EntryDetailComponent implements OnInit {
           this.router.navigate(['/']);
         },
       });
+
     }
   }
 
   goBack(): void {
     this.location.back();
+  }
+
+
+  shareOnFacebook(): void {
+    const currentUrl = window.location.href; 
+    const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}`;
+
+    window.open(facebookUrl, '_blank', 'width=600,height=400');
   }
 }
