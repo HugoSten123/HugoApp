@@ -5,7 +5,7 @@ import { EditorModule } from '@tinymce/tinymce-angular';
 import { EntriesService, Entry } from 'app/core/services/entries.service';
 import { EditorComponent } from '@tinymce/tinymce-angular';
 import { DomSanitizer } from '@angular/platform-browser';
-
+import { FuseConfirmationService } from '@fuse/services/confirmation'; 
 @Component({
   selector: 'app-entries',
   templateUrl: './entries.component.html',
@@ -16,7 +16,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 export class EntriesComponent implements OnInit {
   entries = signal<Entry[]>([]);
   entryForm: FormGroup;
-  editingEntry: Entry | null = null; 
+  editingEntry: Entry | null = null;
   @ViewChild(EditorComponent) editor: EditorComponent | undefined;
 
   borderColors = ['border-red-500', 'border-green-500', 'border-yellow-500', 'border-blue-500'];
@@ -27,7 +27,8 @@ export class EntriesComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private entriesService: EntriesService,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private fuseConfirmationService: FuseConfirmationService
   ) {
     this.entryForm = this.fb.group({
       title: ['', Validators.required],
@@ -68,7 +69,7 @@ export class EntriesComponent implements OnInit {
           next: (response) => this.saveEntry(response.imageUrl),
           error: (err) => {
             console.error('Error uploading image:', err);
-            alert('Failed to upload image.');
+            this.showErrorDialog('Failed to upload image.');
           },
         });
       } else {
@@ -87,7 +88,7 @@ export class EntriesComponent implements OnInit {
 
     this.entriesService.addEntry(newEntry).subscribe({
       next: () => {
-        alert('Entry saved successfully!');
+        this.showSuccessDialog('Entry saved successfully!');
         this.entries.update((entries) => [newEntry, ...entries]);
         this.entryForm.reset();
         this.selectedImage = null;
@@ -110,23 +111,47 @@ export class EntriesComponent implements OnInit {
   }
 
   deleteEntry(entryId: string): void {
-    if (confirm('Are you sure you want to delete this entry?')) {
-      this.entriesService.deleteEntry(entryId).subscribe({
-        next: () => {
-          this.entries.update((entries) => entries.filter(entry => entry.id !== entryId)); 
-          alert('Entry deleted successfully!');
+    const dialogRef = this.fuseConfirmationService.open({
+      title: 'Delete Entry',
+      message: 'Are you sure you want to delete this entry?',
+      icon: {
+        show: true,
+        name: 'heroicons_outline:trash',
+        color: 'warn',
+      },
+      actions: {
+        confirm: {
+          show: true,
+          label: 'Delete',
+          color: 'warn',
         },
-        error: (err) => {
-          console.error('Error deleting entry:', err);
-          alert('Failed to delete entry.');
-        }
-      });
-    }
+        cancel: {
+          show: true,
+          label: 'Cancel',
+        },
+      },
+      dismissible: true,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result === 'confirmed') {
+        this.entriesService.deleteEntry(entryId).subscribe({
+          next: () => {
+            this.entries.update((entries) => entries.filter(entry => entry.id !== entryId));
+            this.showSuccessDialog('Entry deleted successfully!');
+          },
+          error: (err) => {
+            console.error('Error deleting entry:', err);
+            this.showErrorDialog('Failed to delete entry.');
+          }
+        });
+      }
+    });
   }
 
   startEditing(entry: Entry): void {
-    console.log("Editing entry:", entry); 
-    this.editingEntry = { ...entry }; 
+    console.log("Editing entry:", entry);
+    this.editingEntry = { ...entry };
     this.entryForm.patchValue({
       title: entry.title,
       content: entry.content,
@@ -134,7 +159,6 @@ export class EntriesComponent implements OnInit {
     this.selectedImage = entry.imageUrl || null;
   }
 
-  
   saveEditedEntry(): void {
     if (!this.editingEntry) return;
 
@@ -148,7 +172,7 @@ export class EntriesComponent implements OnInit {
 
     this.entriesService.updateEntry(updatedEntry).subscribe({
       next: () => {
-        alert('Entry updated successfully!');
+        this.showSuccessDialog('Entry updated successfully!');
         this.entries.update((entries) =>
           entries.map((e) => (e.id === updatedEntry.id ? updatedEntry : e))
         );
@@ -156,16 +180,55 @@ export class EntriesComponent implements OnInit {
       },
       error: (err) => {
         console.error("Error updating entry:", err);
-        alert('Failed to update entry.');
+        this.showErrorDialog('Failed to update entry.');
       },
     });
   }
 
-  
   cancelEditing(): void {
     this.editingEntry = null;
     this.entryForm.reset();
     this.selectedImage = null;
     this.selectedFile = null;
+  }
+
+  private showSuccessDialog(message: string): void {
+    this.fuseConfirmationService.open({
+      title: 'Success',
+      message: message,
+      icon: {
+        show: true,
+        name: 'heroicons_outline:check-circle',
+        color: 'success',
+      },
+      actions: {
+        confirm: {
+          show: true,
+          label: 'OK',
+          color: 'primary',
+        },
+      },
+      dismissible: true,
+    });
+  }
+
+  private showErrorDialog(message: string): void {
+    this.fuseConfirmationService.open({
+      title: 'Error',
+      message: message,
+      icon: {
+        show: true,
+        name: 'heroicons_outline:x-circle',
+        color: 'error',
+      },
+      actions: {
+        confirm: {
+          show: true,
+          label: 'OK',
+          color: 'warn',
+        },
+      },
+      dismissible: true,
+    });
   }
 }

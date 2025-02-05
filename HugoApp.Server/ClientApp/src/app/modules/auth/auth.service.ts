@@ -4,12 +4,18 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class AuthService {
+  private readonly authKey = 'isAuthenticated'; 
+
+  constructor() {
+    this.isAuthenticated = this.getAuthState();
+  }
+
   private isAuthenticated = false;
 
-  // Login with hardcoded credentials
   login(username: string, password: string): boolean {
-    if (username === 'hugo' && password === 'dagboken min') { // Replace with your own credentials
+    if (username === 'hugo' && password === 'dagboken min') { 
       this.isAuthenticated = true;
+      localStorage.setItem(this.authKey, 'true'); 
       return true;
     }
     return false;
@@ -17,9 +23,14 @@ export class AuthService {
 
   logout(): void {
     this.isAuthenticated = false;
+    localStorage.removeItem(this.authKey); 
   }
 
   isLoggedIn(): boolean {
     return this.isAuthenticated;
+  }
+
+  private getAuthState(): boolean {
+    return localStorage.getItem(this.authKey) === 'true'; 
   }
 }
