@@ -29,7 +29,7 @@ export class EntryDetailComponent implements OnInit {
       this.entriesService.getEntryById(id).subscribe({
         next: (entry) => {
           this.entry = entry;
-          this.titleService.setTitle(`AJP Checkout - Entry Detail: ${entry.title}`);  
+          this.titleService.setTitle(`Hugos dagbok - ${entry.title}`);  
         },
         error: (err) => {
           console.error('Error fetching entry:', err);
