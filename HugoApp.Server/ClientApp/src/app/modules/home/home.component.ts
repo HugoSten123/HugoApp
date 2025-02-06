@@ -7,34 +7,35 @@ import { RouterModule } from '@angular/router';
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
-  imports: [CommonModule, RouterModule]
+  imports: [CommonModule, RouterModule] // Import necessary modules
 })
 export class HomeComponent implements OnInit {
 
-  entryService = inject(EntriesService);
-  diaryEntries: Entry[];
+  entryService = inject(EntriesService); // Inject the Entries service
+  diaryEntries: Entry[]; // Array to store the diary entries
 
+  // Array of border colors for styling
   borderColors = ['border-red-500', 'border-green-500', 'border-yellow-500', 'border-purple-500'];
 
+  // Fetch diary entries on component initialization
   ngOnInit() {
     this.entryService.getEntries().subscribe(entries => {
-      this.diaryEntries = entries;
+      this.diaryEntries = entries; // Store the fetched entries
     });
   }
 
   /**
-   * 
-   * @param index 
-   * @returns 
+   * Determines the border class based on the index
+   * @param index - The index of the entry
+   * @returns A border color class
    */
   getBorderClass(index: number): string {
-    return `${this.borderColors[index % this.borderColors.length]} border`;
+    return `${this.borderColors[index % this.borderColors.length]} border`; // Return the border class
   }
 
-
-    logEntry(entry: Entry): void {
-      console.log('Navigating to entry:', entry);
-    }
-
+  // Log the entry when an entry is clicked
+  logEntry(entry: Entry): void {
+    console.log('Navigating to entry:', entry);
   }
 
+}

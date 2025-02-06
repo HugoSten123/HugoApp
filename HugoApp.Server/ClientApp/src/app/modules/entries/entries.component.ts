@@ -6,7 +6,7 @@ import { EntriesService, Entry } from 'app/core/services/entries.service';
 import { EditorComponent } from '@tinymce/tinymce-angular';
 import { DomSanitizer } from '@angular/platform-browser';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
-import { Title } from '@angular/platform-browser';  
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-entries',
@@ -16,38 +16,38 @@ import { Title } from '@angular/platform-browser';
   imports: [ReactiveFormsModule, FormsModule, CommonModule, EditorModule],
 })
 export class EntriesComponent implements OnInit {
-  entries = signal<Entry[]>([]);
-  entryForm: FormGroup;
-  editingEntry: Entry | null = null;
-  @ViewChild(EditorComponent) editor: EditorComponent | undefined;
+  entries = signal<Entry[]>([]);  // Stores list of entries
+  entryForm: FormGroup;  // Form for creating or editing entries
+  editingEntry: Entry | null = null;  // Holds the entry being edited
+  @ViewChild(EditorComponent) editor: EditorComponent | undefined;  // Reference to the editor component
 
-  borderColors = ['border-red-500', 'border-green-500', 'border-yellow-500', 'border-blue-500'];
+  borderColors = ['border-red-500', 'border-green-500', 'border-yellow-500', 'border-blue-500'];  // Predefined border colors for entry cards
 
-  selectedImage: string | null = null;
-  selectedFile: File | null = null;
+  selectedImage: string | null = null;  // Holds selected image for preview
+  selectedFile: File | null = null;  // Holds selected file for upload
 
   constructor(
     private fb: FormBuilder,
     private entriesService: EntriesService,
     private sanitizer: DomSanitizer,
     private fuseConfirmationService: FuseConfirmationService,
-    private titleService: Title  
+    private titleService: Title
   ) {
     this.entryForm = this.fb.group({
-      title: ['', Validators.required],
-      content: ['', Validators.required],
-      image: [null],
+      title: ['', Validators.required],  // Title form control
+      content: ['', Validators.required],  // Content form control
+      image: [null],  // Image form control
     });
   }
 
   ngOnInit(): void {
-    this.fetchEntries();
-    this.titleService.setTitle('Hugos dagbok - Inlägg');  
+    this.fetchEntries();  // Fetch entries on component initialization
+    this.titleService.setTitle('Hugos dagbok - Inlägg');  // Set the page title
   }
 
   fetchEntries(): void {
     this.entriesService.getEntries().subscribe({
-      next: (data) => this.entries.set(data),
+      next: (data) => this.entries.set(data),  // Set fetched entries
       error: (err) => console.error('Error fetching entries:', err),
     });
   }
@@ -60,9 +60,9 @@ export class EntriesComponent implements OnInit {
 
       const reader = new FileReader();
       reader.onload = () => {
-        this.selectedImage = reader.result as string;
+        this.selectedImage = reader.result as string;  // Set the image preview
       };
-      reader.readAsDataURL(file);
+      reader.readAsDataURL(file);  // Read the file for preview
     }
   }
 
@@ -70,14 +70,14 @@ export class EntriesComponent implements OnInit {
     if (this.entryForm.valid) {
       if (this.selectedFile) {
         this.entriesService.uploadImage(this.selectedFile).subscribe({
-          next: (response) => this.saveEntry(response.imageUrl),
+          next: (response) => this.saveEntry(response.imageUrl),  // Upload image and save entry
           error: (err) => {
             console.error('Error uploading image:', err);
             this.showErrorDialog('Failed to upload image.');
           },
         });
       } else {
-        this.saveEntry(null);
+        this.saveEntry(null);  // Save entry without image if none selected
       }
     }
   }
@@ -87,33 +87,35 @@ export class EntriesComponent implements OnInit {
       title: this.entryForm.value.title,
       content: this.entryForm.value.content,
       date: new Date().toISOString(),
-      imageUrl: imageUrl || "",
+      imageUrl: imageUrl || "",  // Set image URL if available
     };
 
     this.entriesService.addEntry(newEntry).subscribe({
       next: () => {
-        this.showSuccessDialog('Entry saved successfully!');
-        this.entries.update((entries) => [newEntry, ...entries]);
-        this.entryForm.reset();
-        this.selectedImage = null;
-        this.selectedFile = null;
+        this.showSuccessDialog('Entry saved successfully!');  // Show success dialog
+        this.entries.update((entries) => [newEntry, ...entries]);  // Add the new entry to the list
+        this.entryForm.reset();  // Reset the form
+        this.selectedImage = null;  // Clear the image preview
+        this.selectedFile = null;  // Clear the selected file
       },
-      error: (err) => console.error('Error saving entry:', err),
+      error: (err) => console.error('Error saving entry:', err), //Error meassege
     });
   }
 
   onEditorChange(content: string): void {
-    this.entryForm.controls['content'].setValue(content);
+    this.entryForm.controls['content'].setValue(content);  // Update form control when editor content changes
   }
 
   getBorderClass(index: number): string {
-    return this.borderColors[index % this.borderColors.length];
+    return this.borderColors[index % this.borderColors.length];  // Return border color based on index
   }
 
   getSanitizedContent(content: string) {
-    return this.sanitizer.bypassSecurityTrustHtml(content);
+    return this.sanitizer.bypassSecurityTrustHtml(content);  // Sanitize HTML content for safe rendering
   }
 
+
+  //Confirmation
   deleteEntry(entryId: string): void {
     const dialogRef = this.fuseConfirmationService.open({
       title: 'Delete Entry',
@@ -124,15 +126,8 @@ export class EntriesComponent implements OnInit {
         color: 'warn',
       },
       actions: {
-        confirm: {
-          show: true,
-          label: 'Delete',
-          color: 'warn',
-        },
-        cancel: {
-          show: true,
-          label: 'Cancel',
-        },
+        confirm: { show: true, label: 'Delete', color: 'warn' },
+        cancel: { show: true, label: 'Cancel' },
       },
       dismissible: true,
     });
@@ -141,7 +136,7 @@ export class EntriesComponent implements OnInit {
       if (result === 'confirmed') {
         this.entriesService.deleteEntry(entryId).subscribe({
           next: () => {
-            this.entries.update((entries) => entries.filter(entry => entry.id !== entryId));
+            this.entries.update((entries) => entries.filter(entry => entry.id !== entryId));  // Remove deleted entry from the list
             this.showSuccessDialog('Entry deleted successfully!');
           },
           error: (err) => {
@@ -155,12 +150,12 @@ export class EntriesComponent implements OnInit {
 
   startEditing(entry: Entry): void {
     console.log("Editing entry:", entry);
-    this.editingEntry = { ...entry };
+    this.editingEntry = { ...entry };  // Set entry as being edited
     this.entryForm.patchValue({
       title: entry.title,
       content: entry.content,
     });
-    this.selectedImage = entry.imageUrl || null;
+    this.selectedImage = entry.imageUrl || null;  // Set image preview if available
   }
 
   saveEditedEntry(): void {
@@ -178,9 +173,9 @@ export class EntriesComponent implements OnInit {
       next: () => {
         this.showSuccessDialog('Entry updated successfully!');
         this.entries.update((entries) =>
-          entries.map((e) => (e.id === updatedEntry.id ? updatedEntry : e))
+          entries.map((e) => (e.id === updatedEntry.id ? updatedEntry : e))  // Update the entry in the list
         );
-        this.cancelEditing();
+        this.cancelEditing();  // Reset the form after editing
       },
       error: (err) => {
         console.error("Error updating entry:", err);
@@ -190,28 +185,18 @@ export class EntriesComponent implements OnInit {
   }
 
   cancelEditing(): void {
-    this.editingEntry = null;
-    this.entryForm.reset();
-    this.selectedImage = null;
-    this.selectedFile = null;
+    this.editingEntry = null;  // Clear editing state
+    this.entryForm.reset();  // Reset the form
+    this.selectedImage = null;  // Clear the image preview
+    this.selectedFile = null;  // Clear the selected file
   }
 
   private showSuccessDialog(message: string): void {
     this.fuseConfirmationService.open({
       title: 'Success',
       message: message,
-      icon: {
-        show: true,
-        name: 'heroicons_outline:check-circle',
-        color: 'success',
-      },
-      actions: {
-        confirm: {
-          show: true,
-          label: 'OK',
-          color: 'primary',
-        },
-      },
+      icon: { show: true, name: 'heroicons_outline:check-circle', color: 'success' },
+      actions: { confirm: { show: true, label: 'OK', color: 'primary' } },
       dismissible: true,
     });
   }
@@ -220,18 +205,8 @@ export class EntriesComponent implements OnInit {
     this.fuseConfirmationService.open({
       title: 'Error',
       message: message,
-      icon: {
-        show: true,
-        name: 'heroicons_outline:x-circle',
-        color: 'error',
-      },
-      actions: {
-        confirm: {
-          show: true,
-          label: 'OK',
-          color: 'warn',
-        },
-      },
+      icon: { show: true, name: 'heroicons_outline:x-circle', color: 'error' },
+      actions: { confirm: { show: true, label: 'OK', color: 'warn' } },
       dismissible: true,
     });
   }

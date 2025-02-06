@@ -9,54 +9,50 @@ import { EntryDetailComponent } from './modules/entry-detail/entry-detail.compon
 
 export default [
   {
-    path: '',
+    path: '', // Root path, uses LayoutComponent
     component: LayoutComponent,
     data: {
-      layout: 'empty',
+      layout: 'empty', // Empty layout for root
     },
     children: [
       {
-        path: 'Hem',
-        pathMatch: 'full',
+        path: 'Hem', // Home page route
         component: HomeComponent,
         data: {
-          title: 'Hem', 
+          title: 'Hem',
         },
       },
       {
-        path: 'inlägg',
-        pathMatch: 'full',
+        path: 'inlägg', // Entries page, requires authentication
         component: EntriesComponent,
         canActivate: [AuthGuard],
         data: {
-          title: 'Inlägg', 
+          title: 'Inlägg',
         },
       },
       {
-        path: 'om',
-        pathMatch: 'full',
+        path: 'om', // About page route
         component: AboutComponent,
         data: {
-          title: 'Om', 
+          title: 'Om',
         },
       },
       {
-        path: 'login',
-        pathMatch: 'full',
+        path: 'login', // Login page route
         component: LoginComponent,
         data: {
-          title: 'Logga in', 
+          title: 'Logga in',
         },
       },
       {
-        path: 'entry-detail/:id',
+        path: 'entry-detail/:id', // Entry details page with dynamic ID
         component: EntryDetailComponent,
         data: {
-          title: 'Inlägg Detaljer', 
+          title: 'Inlägg Detaljer',
         },
       },
       {
-        path: '',
+        path: '', // Default route, redirects to Home page
         redirectTo: 'Hem',
         pathMatch: 'full',
       },

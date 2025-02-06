@@ -25,14 +25,15 @@ export class EntryDetailComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    // Get entry ID from URL and fetch entry data
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.entriesService.getEntryById(id).subscribe({
         next: (entry) => {
           this.entry = entry;
 
+          // Update page title and meta tags for SEO
           this.titleService.setTitle(`Hugos dagbok - ${entry.title}`);
-
           this.metaService.updateTag({ name: 'description', content: entry.content.slice(0, 150) });
           this.metaService.updateTag({ property: 'og:title', content: entry.title });
           this.metaService.updateTag({ property: 'og:description', content: entry.content.slice(0, 150) });
@@ -45,17 +46,17 @@ export class EntryDetailComponent implements OnInit {
           this.router.navigate(['/']);
         },
       });
-
     }
   }
 
+  // Go back to the previous page
   goBack(): void {
     this.location.back();
   }
 
-
+  // Share entry on Facebook
   shareOnFacebook(): void {
-    const currentUrl = window.location.href; 
+    const currentUrl = window.location.href;
     const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}`;
 
     window.open(facebookUrl, '_blank', 'width=600,height=400');

@@ -1,21 +1,27 @@
 <div class="max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-lg">
+  <!-- Display entry title -->
   <h1 class="text-3xl font-bold text-gray-800 mb-4">{{ entry?.title }}</h1>
 
+  <!-- Show entry image if it exists -->
   <img *ngIf="entry?.imageUrl" [src]="entry?.imageUrl" alt="Entry Image" class="w-full h-auto rounded-md mb-4" />
 
+  <!-- Display the content of the entry -->
   <p class="text-gray-600 mb-4" [innerHTML]="entry?.content"></p>
 
+  <!-- Display the entry's date -->
   <span class="block text-sm text-gray-500 text-right">📅 {{ entry?.date | date:'medium' }}</span>
 
   <div class="flex justify-between items-center mt-6">
-
+    <!-- Button to go back to previous page -->
     <button (click)="goBack()"
             class="py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
       Tillbaka
     </button>
 
+    <!-- Button to share entry on Facebook -->
     <button (click)="shareOnFacebook()"
             class="flex items-center py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+      <!-- Facebook Icon -->
       <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24" stroke="currentColor">
         <path d="M22 2C22 1.44772 21.5523 1 21 1H3C2.44772 1 2 1.44772 2 2V22C2 22.5523 2.44772 23 3 23H12V14.44H9V11H12V8.6C12 5.74 13.69 4 16.28 4C17.88 4 19 4.22 19.17 4.3V7H17.6C16.76 7 16.28 7.62 16.28 8.45V11H19L18.55 14.44H16.28V23H22C22.5523 23 23 22.5523 23 22V2C23 1.44772 22.5523 1 22 1Z" />
       </svg>
